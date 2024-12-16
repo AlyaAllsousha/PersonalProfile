@@ -33,9 +33,11 @@ class ProfileViewModel: ViewModel() {
         launcher2 = activity.registerForActivityResult(
                 ActivityResultContracts.PickVisualMedia(),
                 ActivityResultCallback {
-                    var uriImg = it
-                    imgUriMutable.value = it
-                    binding.imgProf.setImageURI(uriImg)
+                    if(it != null) {
+                        var uriImg = it
+                        imgUriMutable.value = it
+                        binding.imgProf.setImageURI(uriImg)
+                    }
                 }
 
             )

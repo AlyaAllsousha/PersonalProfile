@@ -24,7 +24,7 @@ class ProfileViewModel: ViewModel() {
     val achi = AchievArray()
     val achievArray = MutableLiveData<ArrayList<Achievments>>(achi.gelList())
     val adapter = achievArray.value?.let { AchievmentsAdapter(it) }
-
+    var launcher:ActivityResultLauncher<Intent>? = null
     fun initProf(activity: AppCompatActivity,binding: ProfileActivityBinding){
         this.activity = activity
         this.binding = binding
@@ -41,8 +41,15 @@ class ProfileViewModel: ViewModel() {
                 }
 
             )
-
-
+        launcher = activity.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+            ActivityResultCallback {
+                if(it.resultCode == 0){
+                    binding.name.text = it.data?.getStringExtra("New name").toString()
+                }
+                Log.d("new_name", it.data?.getStringExtra("New name").toString())
+            }
+        )
 
     }
 
@@ -73,5 +80,8 @@ class ProfileViewModel: ViewModel() {
         activity?.startActivity(intent)
     }
 
-
+    fun clickChange(){
+        val intent = Intent(activity, EditActivity::class.java)
+        launcher?.launch(intent)
+    }
 }
